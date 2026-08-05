@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── PNC / UMKM ──────────────────────────────────────────────────────────────
+
+model Komunitas {
+  id        Int      @id @default(autoincrement())
+  nama      String   @unique // "Komunitas Culinary Pasisia"
+  deskripsi String?
+  umkm      Umkm[]
+  createdAt DateTime @default(now())
+}
+
+model Umkm {
+  id          Int        @id @default(autoincrement())
+  namaOwner   String
+  namaUsaha   String
+  slug        String     @unique
+  alamatUsaha String // nagari/kecamatan, misal "Painan-Pessel", "Tarusan"
+  noHpWa      String // format 62xxxxxxxxxx, nomor kontak langsung toko
+  logoUrl     String?
+  isActive    Boolean    @default(true)
+
+  komunitasId Int?
+  komunitas   Komunitas? @relation(fields: [komunitasId], references: [id])
+
+  items     Item[]
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+// ─── Katalog ─────────────────────────────────────────────────────────────────
+
+model Item {
+  // CHANGED: price jadi opsional — banyak UMKM belum punya harga fix per item,
+  // pembeli tanya/nego langsung via WA. Tampilkan "Hubungi penjual" jika null.
+  id              Int      @id @default(autoincrement())
+  name            String
+  type            String // "produk" | "layanan" (dipertahankan utk kompatibilitas admin lama)
+  price           Int? // CHANGED: was required Int
+  description     String
+  longDescription String?
+  images          String[] @default([])
+  createdAt       DateTime @default(now())
+
+  // NEW
+  umkmId Int?
+  umkm   Umkm? @relation(fields: [umkmId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  phone     String   @unique
+  lid       String?  @unique
+  linkToken String?  @unique
+  name      String
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  items           Json
+  total           Int
+  negotiatedPrice Int?
+  priceOffers     Json     @default("[]")
+  status          String   @default("pending")
+  note            String?
+  createdAt       DateTime @default(now())
+
+  // NEW: setiap Order sekarang selalu milik SATU UMKM.
+  // Kalau cart pembeli berisi produk dari 3 UMKM berbeda, checkout akan
+  // membuat 3 row Order (satu per UMKM), bukan 1 row gabungan.
+  umkmId Int?
+  umkm   Umkm? @relation(fields: [umkmId], references: [id])
+
+  // NEW: dipakai untuk mengelompokkan beberapa Order yang lahir dari
+  // satu kali proses checkout (biar bisa ditampilkan sebagai "1 pesanan
+  // gabungan" di sisi pembeli walau backend-nya beberapa row).
+  checkoutGroupId String?
+}
+
+// ─── IoT (tidak berubah) ──────────────────────────────────────────────────────
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  authToken   String    @unique @default(cuid())
+  widgets     Json      @default("[]")
+  createdAt   DateTime  @default(now())
+  devices     IotData[]
+}
+
+model IotData {
+  id          Int      @id @default(autoincrement())
+  deviceName  String   @unique
+  projectId   Int?
+  project     Project? @relation(fields: [projectId], references: [id])
+  status      String   @default("offline")
+  temperature Float    @default(0)
+  humidity    Float    @default(0)
+  pins        Json     @default("{}")
+  relays      Json     @default("{}")
+  relay       Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+}
