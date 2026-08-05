@@ -143,7 +143,7 @@ function ChatPanel({ onAddToCart }) {
       role: "assistant",
       type: "text",
       content:
-        "Hi! Saya SyRa.\nTanya produk IoT yang kamu butuhkan, saya bantu rekomendasikan.",
+        "Hi! Saya SyRa.\nTanya produk yang kamu butuhkan, saya bantu rekomendasikan.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -595,12 +595,6 @@ export default function CatalogPage() {
         @media (min-width: 480px) { .product-grid { grid-template-columns: repeat(2,1fr); } }
         @media (min-width: 1280px) { .product-grid { grid-template-columns: repeat(3,1fr); } }
 
-        /* cart sidebar — desktop only */
-        .cart-sidebar { display: none; }
-        @media (min-width: 1024px) {
-          .catalog-area { flex-direction: row !important; }
-          .cart-sidebar { display: block; width: 260px !important; flex-shrink: 0; }
-        }
 
         .banner-stats { display: flex; }
         @media (max-width: 640px) { .banner-stats { display: none !important; } }
@@ -948,7 +942,7 @@ export default function CatalogPage() {
                       fontWeight: 500,
                     }}
                   >
-                    IoT Solutions
+                    UMKM 
                   </span>
                 </div>
                 <h2
@@ -960,7 +954,7 @@ export default function CatalogPage() {
                     marginBottom: "6px",
                   }}
                 >
-                  SyRa Store
+                  KOMUNITAS WISATA KULINER PASISIA
                 </h2>
                 <p
                   style={{
@@ -971,9 +965,108 @@ export default function CatalogPage() {
                     marginBottom: "16px",
                   }}
                 >
-                  Pembuatan & Pembelian Perangkat IoT, Dashboard, Sensor,
-                  Microcontroller, 3D Modelling.
+                  BERSAMA PASISIA NIGHT CULINARY
                 </p>
+                <p> </p>
+                <p
+                  style={{
+                    fontSize: "13px",
+                    color: "var(--text-secondary)",
+                    maxWidth: "360px",
+                    lineHeight: 1.6,
+                    marginBottom: "16px",
+                  }}
+                >
+                  Berita Terkait:
+                </p>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                    gap: "16px",
+                  }}
+                ><a
+                    href="https://www.hariansinggalang.co.id/berita/246220/tim-dosen-unp-laksanakan-pkm-di-painan-beri-pendampingan-transformasi-digital-promosi-umkm-berbasis-potensi-lokal"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "12px 16px",
+                      border: "1px solid var(--border-color)",
+                      borderRadius: "12px",
+                      background: "var(--card-bg)",
+                      color: "var(--text-primary)",
+                      textDecoration: "none",
+                      marginBottom: "12px",
+                      transition: "0.2s",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--hover-bg)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "var(--card-bg)";
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontWeight: 600 }}>
+                        Tim Dosen UNP Laksanakan PKM di Painan,
+                        Beri Pendampingan Transformasi Digital Promosi UMKM Berbasis Potensi Lokal
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        hariansinggalang.co.id
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    href="https://rri.co.id/padang/iptek/2605541/tim-dosen-unp-dampingi-umkm-painan-bertransformasi-digital-untuk-perluas-pasar?nocache=true"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "12px 16px",
+                      border: "1px solid var(--border-color)",
+                      borderRadius: "12px",
+                      background: "var(--card-bg)",
+                      color: "var(--text-primary)",
+                      textDecoration: "none",
+                      marginBottom: "12px",
+                      transition: "0.2s",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "var(--hover-bg)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "var(--card-bg)";
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontWeight: 600 }}>
+                        Tim Dosen UNP Dampingi UMKM Painan Bertransformasi Digital untuk Perluas Pasar
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        rri.co.id
+                      </div>
+                    </div>
+                  </a>
+
+                </div>
+
                 <button
                   onClick={() =>
                     document
@@ -1105,229 +1198,10 @@ export default function CatalogPage() {
                   </Link>
                 ))}
               </div>
-
-            {/* Cart sidebar */}
-            <div className="cart-sidebar" style={{ width: "100%" }}>
-              <div
-                style={{
-                  background: "var(--bg-secondary)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "var(--radius-lg)",
-                  padding: "14px",
-                  position: "sticky",
-                  top: "16px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "14px",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontWeight: 600,
-                      fontSize: "13px",
-                      color: "var(--text-primary)",
-                    }}
-                  >
-                    Keranjang
-                  </p>
-                  {totalItems > 0 && (
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        fontWeight: 600,
-                        padding: "2px 8px",
-                        borderRadius: "20px",
-                        background: "var(--accent-subtle)",
-                        color: "var(--accent)",
-                        border: "1px solid rgba(244,121,32,0.2)",
-                      }}
-                    >
-                      {totalItems} item
-                    </span>
-                  )}
-                </div>
-                {cart.length === 0 && (
-                  <p
-                    style={{
-                      color: "var(--text-muted)",
-                      fontSize: "12px",
-                      textAlign: "center",
-                      padding: "20px 0",
-                    }}
-                  >
-                    Belum ada item
-                  </p>
-                )}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "2px",
-                  }}
-                >
-                  {cart.map((item) => (
-                    <div
-                      key={item.id}
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        padding: "9px 0",
-                        borderBottom: "1px solid var(--border)",
-                      }}
-                    >
-                      <div style={{ flex: 1, minWidth: 0, marginRight: "8px" }}>
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: 500,
-                            color: "var(--text-primary)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          {item.name}
-                        </p>
-                        <p
-                          style={{
-                            fontSize: "11px",
-                            color: "var(--text-secondary)",
-                            marginTop: "2px",
-                          }}
-                        >
-                          {item.price != null
-                            ? `Rp ${(item.price * item.qty).toLocaleString("id-ID")}`
-                            : "Harga belum tersedia"}
-                        </p>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <button
-                          onClick={() =>
-                            item.qty === 1
-                              ? removeFromCart(item.id)
-                              : setCart((c) =>
-                                  c.map((x) =>
-                                    x.id === item.id
-                                      ? { ...x, qty: x.qty - 1 }
-                                      : x,
-                                  ),
-                                )
-                          }
-                          style={{
-                            width: "24px",
-                            height: "24px",
-                            borderRadius: "var(--radius-sm)",
-                            border: "1px solid var(--border)",
-                            fontSize: "13px",
-                            fontWeight: 600,
-                            background:
-                              item.qty === 1
-                                ? "var(--red-subtle)"
-                                : "var(--bg-tertiary)",
-                            color:
-                              item.qty === 1
-                                ? "var(--red)"
-                                : "var(--text-secondary)",
-                            cursor: "pointer",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          −
-                        </button>
-                        <span
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: 600,
-                            color: "var(--text-primary)",
-                            minWidth: "18px",
-                            textAlign: "center",
-                          }}
-                        >
-                          {item.qty}
-                        </span>
-                        <button
-                          onClick={() =>
-                            setCart((c) =>
-                              c.map((x) =>
-                                x.id === item.id ? { ...x, qty: x.qty + 1 } : x,
-                              ),
-                            )
-                          }
-                          style={{
-                            width: "24px",
-                            height: "24px",
-                            borderRadius: "var(--radius-sm)",
-                            border: "1px solid rgba(244,121,32,0.25)",
-                            background: "var(--accent-subtle)",
-                            color: "var(--accent)",
-                            cursor: "pointer",
-                            fontSize: "13px",
-                            fontWeight: 600,
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {cart.length > 0 && (
-                  <div style={{ marginTop: "14px" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        fontSize: "13px",
-                        fontWeight: 600,
-                        color: "var(--text-primary)",
-                        marginBottom: "12px",
-                      }}
-                    >
-                      <span>Total</span>
-                      <span>Rp {totalPrice.toLocaleString("id-ID")}</span>
-                    </div>
-                    <button
-                      onClick={goToCheckout}
-                      style={{
-                        width: "100%",
-                        background: "var(--accent-subtle)",
-                        color: "var(--accent)",
-                        border: "1px solid rgba(244,121,32,0.25)",
-                        borderRadius: "var(--radius-sm)",
-                        padding: "9px",
-                        fontSize: "12px",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Pesan via WhatsApp
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

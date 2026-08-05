@@ -2,8 +2,8 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 
 export const metadata = {
-  title: "SyRa Store - SRYY Team Katalog",
-  description: "Katalog produk dan layanan IoT",
+  title: "KOMUNITAS WISATA KULINER PASISIA",
+  description: "BERSAMA PASISIA NIGHT CULINARY",
 };
 
 export default function RootLayout({ children }) {
