@@ -10,10 +10,10 @@ function subscribe(cb) {
   return () => window.removeEventListener('storage', cb)
 }
 function getThemeSnapshot() {
-  return localStorage.getItem('syra-theme') || 'dark'
+  return localStorage.getItem('syra-theme') || 'light'
 }
 function getThemeServerSnapshot() {
-  return 'dark' // selalu dark di server (SSR)
+  return 'light' // selalu light di server (SSR) — identitas visual PNC itu cerah, bukan gelap
 }
 
 export default function Navbar() {

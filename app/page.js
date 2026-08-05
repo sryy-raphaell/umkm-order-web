@@ -1187,8 +1187,8 @@ export default function CatalogPage() {
                           {umkm.komunitas && (
                             <span style={{
                               fontSize: "10px", fontWeight: 600, padding: "2px 8px",
-                              borderRadius: "20px", background: "var(--accent-subtle)",
-                              color: "var(--accent)", border: "1px solid rgba(244,121,32,0.2)",
+                              borderRadius: "20px", background: "var(--komunitas-subtle)",
+                              color: "var(--komunitas)", border: "1px solid var(--komunitas-border)",
                               alignSelf: "flex-start",
                             }}>
                               {umkm.komunitas.nama}

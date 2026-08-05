@@ -1,8 +1,56 @@
 @import "tailwindcss";
 
-/* ─── DARK MODE — UNP Theme (Orange · Biru Tua · Putih) ──── */
+/* ─── LIGHT MODE (DEFAULT) — identitas PNC: cerah, hangat, seperti poster menu UMKM ── */
 :root {
-  /* Backgrounds — dark navy UNP */
+  /* Krem hangat, bukan putih pure — mirip background poster Widury/Frozen Bakar Yuyu */
+  --bg-primary:    #F3E9D6;  /* page — sedikit lebih gelap/tan dari kartu */
+  --bg-secondary:  #FFFDF8;  /* kartu — nyaris putih, kontras jelas vs page */
+  --bg-tertiary:   #F5E9D4;
+  --bg-hover:      #EFDFC2;
+
+  --border:        #DDC9A0;  /* lebih gelap dari sebelumnya, biar border kelihatan */
+  --border-light:  #C4A96F;
+
+  --text-primary:  #2E1D0E;  /* coklat gelap, senada judul "FOOD MENU" di poster — bukan biru-abu */
+  --text-secondary:#6B5642;
+  --text-muted:    #9C8A72;
+
+  /* Orange lebih jenuh — dekat ke oranye poster, bukan oranye korporat pastel */
+  --accent:        #E8720F;
+  --accent-dim:    #C55E09;
+  --accent-glow:   rgba(232, 114, 15, 0.16);
+  --accent-subtle: rgba(232, 114, 15, 0.10);
+
+  /* Hijau — dipinjam dari logo resmi PNC/KWKP, khusus badge komunitas
+     (dipisah dari --accent supaya badge komunitas & tombol beli tidak
+     tabrakan warna di komponen yang sama) */
+  --komunitas:        #1E7A4C;
+  --komunitas-subtle: rgba(30, 122, 76, 0.10);
+  --komunitas-border: rgba(30, 122, 76, 0.25);
+
+  --unp-blue:      #1A3F8A;
+  --unp-blue-light:#2456B0;
+  --unp-blue-glow: rgba(26, 63, 138, 0.10);
+
+  --red:           #dc2626;
+  --red-subtle:    rgba(220, 38, 38, 0.08);
+  --blue:          #2456B0;
+  --blue-subtle:   rgba(36, 86, 176, 0.10);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --navbar-bg:     rgba(255, 253, 248, 0.95);
+  --navbar-border: #DDC9A0;
+  --logo-bg:       #E8720F;
+  --logo-color:    #FFFFFF;
+
+  color-scheme: light;
+}
+
+/* ─── DARK MODE (opsional, lewat toggle) — tetap disediakan, bukan default ── */
+:root[data-theme="dark"] {
   --bg-primary: #07111F;
   --bg-secondary: #0D1B2E;
   --bg-tertiary: #132338;
@@ -15,13 +63,15 @@
   --text-secondary: #8BA8C8;
   --text-muted: #4E6D8C;
 
-  /* Accent — UNP Orange */
   --accent: #F47920;
   --accent-dim: #D96010;
   --accent-glow: rgba(244, 121, 32, 0.14);
   --accent-subtle: rgba(244, 121, 32, 0.10);
 
-  /* UNP Dark Blue (secondary highlight) */
+  --komunitas:        #2FA36A;
+  --komunitas-subtle: rgba(47, 163, 106, 0.14);
+  --komunitas-border: rgba(47, 163, 106, 0.30);
+
   --unp-blue: #1A3F8A;
   --unp-blue-light: #2456B0;
   --unp-blue-glow: rgba(26, 63, 138, 0.30);
@@ -31,54 +81,12 @@
   --blue: #60a5fa;
   --blue-subtle: rgba(96, 165, 250, 0.10);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-
   --navbar-bg: rgba(7, 17, 31, 0.90);
   --navbar-border: #1E3554;
   --logo-bg: #F47920;
   --logo-color: #FFFFFF;
 
   color-scheme: dark;
-}
-
-/* ─── LIGHT MODE — UNP Theme (Warm Off-White) ─────────────── */
-:root[data-theme="light"] {
-  /* Warm cream-white — tidak silau, nyaman di mata */
-  --bg-primary:    #FAF8F4;
-  --bg-secondary:  #F3F0EA;
-  --bg-tertiary:   #EAE6DD;
-  --bg-hover:      #E0DBCF;
-
-  --border:        #CCC7BC;
-  --border-light:  #B0A99C;
-
-  --text-primary:  #1C2B3A;
-  --text-secondary:#3D5265;
-  --text-muted:    #7A8EA0;
-
-  /* Orange accent */
-  --accent:        #E86D10;
-  --accent-dim:    #C75A08;
-  --accent-glow:   rgba(232, 109, 16, 0.14);
-  --accent-subtle: rgba(232, 109, 16, 0.10);
-
-  --unp-blue:      #1A3F8A;
-  --unp-blue-light:#2456B0;
-  --unp-blue-glow: rgba(26, 63, 138, 0.10);
-
-  --red:           #dc2626;
-  --red-subtle:    rgba(220, 38, 38, 0.08);
-  --blue:          #2456B0;
-  --blue-subtle:   rgba(36, 86, 176, 0.10);
-
-  --navbar-bg:     rgba(250, 248, 244, 0.95);
-  --navbar-border: #CCC7BC;
-  --logo-bg:       #E86D10;
-  --logo-color:    #FFFFFF;
-
-  color-scheme: light;
 }
 
 /* ─── BASE ────────────────────────────────────────────────── */
@@ -88,6 +96,11 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   transition: background 0.3s ease, color 0.3s ease;
+  overflow-x: hidden; /* cegah kartu/kotak logo terpotong di tepi viewport mobile */
+}
+
+* {
+  box-sizing: border-box;
 }
 
 /* ─── SCROLLBAR ───────────────────────────────────────────── */

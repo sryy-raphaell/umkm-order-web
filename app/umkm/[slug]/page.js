@@ -409,9 +409,9 @@ export default function UmkmDetailPage() {
                 fontWeight: 600,
                 padding: "3px 8px",
                 borderRadius: "20px",
-                background: "var(--accent-subtle)",
-                color: "var(--accent)",
-                border: "1px solid rgba(244,121,32,0.2)",
+                background: "var(--komunitas-subtle)",
+                color: "var(--komunitas)",
+                border: "1px solid var(--komunitas-border)",
               }}
             >
               {umkm.komunitas.nama}
