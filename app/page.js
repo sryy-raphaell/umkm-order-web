@@ -508,10 +508,14 @@ export default function CatalogPage() {
     router.push("/checkout");
   }
 
-  const filteredUmkm = umkmList.filter((u) =>
-    u.namaUsaha.toLowerCase().includes(search.toLowerCase()) ||
-    u.alamatUsaha.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredUmkm = umkmList.filter((u) => {
+    const q = search.toLowerCase();
+    return (
+      u.namaUsaha.toLowerCase().includes(q) ||
+      u.alamatUsaha.toLowerCase().includes(q) ||
+      (u.items || []).some((item) => item.name.toLowerCase().includes(q))
+    );
+  });
   const totalItems = cart.reduce((s, c) => s + c.qty, 0);
   const totalPrice = cart.reduce((s, c) => s + (c.price ?? 0) * c.qty, 0);
 
@@ -1146,7 +1150,7 @@ export default function CatalogPage() {
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Cari nama usaha atau daerah..."
+                  placeholder="Cari nama usaha, produk, atau daerah..."
                   style={{
                     width: "100%",
                     maxWidth: "320px",
@@ -1161,42 +1165,91 @@ export default function CatalogPage() {
                 />
               </div>
               <div className="product-grid">
-                {filteredUmkm.map((umkm) => (
-                  <Link key={umkm.id} href={`/umkm/${umkm.slug}`} style={{ textDecoration: "none" }}>
-                    <div
-                      style={{
-                        background: "var(--bg-secondary)",
-                        border: "1px solid var(--border)",
-                        borderRadius: "var(--radius-lg)",
-                        padding: "14px",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "8px",
-                        height: "100%",
-                      }}
-                    >
-                      {umkm.komunitas && (
-                        <span style={{
-                          fontSize: "10px", fontWeight: 600, padding: "2px 8px",
-                          borderRadius: "20px", background: "var(--accent-subtle)",
-                          color: "var(--accent)", border: "1px solid rgba(244,121,32,0.2)",
-                          alignSelf: "flex-start",
-                        }}>
-                          {umkm.komunitas.nama}
-                        </span>
-                      )}
-                      <p style={{ fontWeight: 600, fontSize: "14px", color: "var(--text-primary)" }}>
-                        {umkm.namaUsaha}
-                      </p>
-                      <p style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
-                        {umkm.namaOwner} · {umkm.alamatUsaha}
-                      </p>
-                      <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "auto" }}>
-                        {umkm.items?.length || 0} produk
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+                {filteredUmkm.map((umkm) => {
+                  const menuAndalan = (umkm.items || [])
+                    .slice(0, 3)
+                    .map((i) => i.name)
+                    .join(", ");
+                  return (
+                    <Link key={umkm.id} href={`/umkm/${umkm.slug}`} style={{ textDecoration: "none" }}>
+                      <div
+                        style={{
+                          background: "var(--bg-secondary)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "var(--radius-lg)",
+                          padding: "14px",
+                          display: "flex",
+                          gap: "12px",
+                          height: "100%",
+                        }}
+                      >
+                        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+                          {umkm.komunitas && (
+                            <span style={{
+                              fontSize: "10px", fontWeight: 600, padding: "2px 8px",
+                              borderRadius: "20px", background: "var(--accent-subtle)",
+                              color: "var(--accent)", border: "1px solid rgba(244,121,32,0.2)",
+                              alignSelf: "flex-start",
+                            }}>
+                              {umkm.komunitas.nama}
+                            </span>
+                          )}
+                          <p style={{ fontWeight: 600, fontSize: "14px", color: "var(--text-primary)" }}>
+                            {umkm.namaUsaha}
+                          </p>
+                          <p style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
+                            {umkm.namaOwner} · {umkm.alamatUsaha}
+                          </p>
+                          {menuAndalan && (
+                            <p
+                              style={{
+                                fontSize: "11px",
+                                color: "var(--accent)",
+                                fontWeight: 500,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              🍽 {menuAndalan}
+                            </p>
+                          )}
+                          <p style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "auto" }}>
+                            {umkm.items?.length || 0} produk
+                          </p>
+                        </div>
+
+                        {/* Logo UMKM — placeholder ikon kalau logoUrl belum diisi */}
+                        <div
+                          style={{
+                            width: "64px",
+                            height: "64px",
+                            flexShrink: 0,
+                            borderRadius: "var(--radius-md)",
+                            border: "1px solid var(--border)",
+                            background: "var(--bg-tertiary)",
+                            overflow: "hidden",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          {umkm.logoUrl ? (
+                            <img
+                              src={umkm.logoUrl}
+                              alt={umkm.namaUsaha}
+                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                          ) : (
+                            <span style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-muted)" }}>
+                              {umkm.namaUsaha.charAt(0).toUpperCase()}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           </div>
