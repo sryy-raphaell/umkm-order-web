@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ProductImage from "./components/ProductImage";
+import { useSearchStore } from "../lib/searchStore";
 import {
   LuBot,
   LuShoppingBag,
@@ -13,6 +14,7 @@ import {
   LuChevronRight,
   IconLabel,
 } from "./components/icons";
+
 
 function ProductThumbnail({ images, size = 72, alt = "" }) {
   const src = Array.isArray(images) && images.length > 0 ? images[0] : null;
@@ -435,12 +437,20 @@ async function fetchUmkm() {
 
 export default function CatalogPage() {
   const [umkmList, setUmkmList] = useState([]);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useSearchStore();
   const [items, setItems] = useState([]);
   const [chatCollapsed, setChatCollapsed] = useState(false);
   const [mobileTab, setMobileTab] = useState("catalog"); // "catalog" | "chat"
   const [cartOpen, setCartOpen] = useState(false);
   const router = useRouter();
+
+  // Auto switch ke tab "catalog" pada mobile jika ada query pencarian aktif
+  useEffect(() => {
+    if (search && mobileTab !== "catalog") {
+      setMobileTab("catalog");
+    }
+  }, [search, mobileTab]);
+
 
   function readCartSafe() {
     if (typeof window === "undefined") return [];
@@ -1102,15 +1112,15 @@ export default function CatalogPage() {
                 }}
               >
                 {[
-                  { value: items.length, label: "Total Item" },
-                  {
-                    value: items.filter((i) => i.type === "product").length,
-                    label: "Hardware",
-                  },
-                  {
-                    value: items.filter((i) => i.type === "service").length,
-                    label: "Layanan",
-                  },
+                  // { value: items.length, label: "Total Item" },
+                  // {
+                  //   value: items.filter((i) => i.type === "product").length,
+                  //   label: "Hardware",
+                  // },
+                  // {
+                  //   value: items.filter((i) => i.type === "service").length,
+                  //   label: "Layanan",
+                  // },
                 ].map((s, i) => (
                   <div key={i} style={{ textAlign: "center" }}>
                     <p

@@ -1,8 +1,9 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect, useSyncExternalStore } from 'react'
-import { LuSun, LuMoon } from 'react-icons/lu'
+import { LuSun, LuMoon, LuSearch, LuX } from 'react-icons/lu'
+import { useSearchStore } from '../../lib/searchStore'
 
 // ── useSyncExternalStore untuk baca localStorage tanpa setState di effect ──
 function subscribe(cb) {
@@ -18,6 +19,7 @@ function getThemeServerSnapshot() {
 
 export default function Navbar() {
   const pathname = usePathname()
+  const router = useRouter()
 
   // useSyncExternalStore: aman dari hydration mismatch, tanpa setState di effect
   const theme = useSyncExternalStore(
@@ -25,6 +27,8 @@ export default function Navbar() {
     getThemeSnapshot,
     getThemeServerSnapshot,
   )
+
+  const [search, setSearch] = useSearchStore()
 
   // Sync atribut ke <html> setiap kali theme berubah — ini murni side-effect ke DOM
   useEffect(() => {
@@ -36,6 +40,14 @@ export default function Navbar() {
     localStorage.setItem('syra-theme', next)
     // Dispatch storage event agar useSyncExternalStore re-subscribe
     window.dispatchEvent(new StorageEvent('storage', { key: 'syra-theme', newValue: next }))
+  }
+
+  function handleSearchChange(e) {
+    const val = e.target.value
+    setSearch(val)
+    if (pathname !== '/' && val.trim() !== '') {
+      router.push('/')
+    }
   }
 
   const isLight = theme === 'light'
@@ -52,7 +64,7 @@ export default function Navbar() {
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       borderBottom: '1px solid var(--navbar-border)',
-      padding: '0 24px',
+      padding: '0 16px',
       height: '52px',
       display: 'flex',
       alignItems: 'center',
@@ -60,11 +72,12 @@ export default function Navbar() {
       position: 'sticky',
       top: 0,
       zIndex: 50,
+      gap: '8px',
       transition: 'background 0.3s ease, border-color 0.3s ease',
     }}>
 
       {/* ── Logo ── */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
         <div style={{
           width: '24px',
           height: '24px',
@@ -84,13 +97,67 @@ export default function Navbar() {
           fontSize: '14px',
           color: 'var(--text-primary)',
           transition: 'color 0.3s ease',
+          whiteSpace: 'nowrap',
         }}>
           SyRa Store
         </span>
+      </Link>
+
+      {/* ── Search Bar Navbar ── */}
+      <div style={{
+        flex: 1,
+        maxWidth: '300px',
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        margin: '0 4px',
+      }}>
+        <LuSearch
+          size={14}
+          color="var(--text-muted)"
+          style={{ position: 'absolute', left: '10px', pointerEvents: 'none', zIndex: 1 }}
+        />
+        <input
+          type="text"
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="Cari produk / UMKM..."
+          style={{
+            width: '100%',
+            padding: '6px 26px 6px 30px',
+            borderRadius: '20px',
+            border: '1px solid var(--border)',
+            background: 'var(--bg-tertiary)',
+            color: 'var(--text-primary)',
+            fontSize: '12px',
+            outline: 'none',
+            transition: 'border-color 0.15s, background 0.15s',
+          }}
+        />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            title="Hapus pencarian"
+            style={{
+              position: 'absolute',
+              right: '8px',
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-muted)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '2px',
+            }}
+          >
+            <LuX size={12} />
+          </button>
+        )}
       </div>
 
       {/* ── Nav Links + Toggle ── */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
 
         {links.map(link => (
           <Link key={link.href} href={link.href} style={{
@@ -113,11 +180,11 @@ export default function Navbar() {
           onClick={toggleTheme}
           title={isLight ? 'Ganti ke Dark Mode' : 'Ganti ke Light Mode'}
           style={{
-            marginLeft: '8px',
+            marginLeft: '4px',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            padding: '5px 12px',
+            padding: '5px 10px',
             borderRadius: '20px',
             fontSize: '12px',
             fontWeight: 500,
