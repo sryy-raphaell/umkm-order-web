@@ -581,8 +581,8 @@ export default function CatalogPage() {
 
         /* ── mobile ── */
         @media (max-width: 767px) {
-          .catalog-page { height: auto; overflow: visible; }
-          .main-shell { flex-direction: column; flex: none; min-height: auto; overflow: visible; }
+          .catalog-page { height: auto; overflow-x: hidden; }
+          .main-shell { flex-direction: column; flex: none; min-height: auto; width: 100%; overflow-x: hidden; }
           .chat-panel {
             width: 100% !important; min-width: 100% !important;
             border-right: none; border-bottom: 1px solid var(--border);
@@ -591,14 +591,16 @@ export default function CatalogPage() {
           }
           .right-panel {
             display: ${mobileTab === "catalog" ? "flex" : "none"} !important;
-            overflow-y: visible; flex: none;
+            overflow-y: visible; overflow-x: hidden; flex: none; width: 100%;
             padding-bottom: 90px;
           }
           .mobile-tabs { display: flex !important; }
           .collapse-btn { display: none !important; }
           /* tighten banner on mobile */
-          .banner-inner { padding: 18px 16px !important; }
+          .banner-container { padding: 12px 12px 0 12px !important; }
+          .banner-inner { padding: 16px 14px !important; }
           .catalog-area { padding: 0 12px 16px 12px !important; }
+          .news-grid { grid-template-columns: 1fr !important; }
           /* native feel: bigger tap targets */
           button { -webkit-tap-highlight-color: transparent; }
           input { font-size: 16px !important; } /* prevent iOS zoom */
@@ -713,7 +715,7 @@ export default function CatalogPage() {
           gap: "0",
         }}
       >
-        {["catalog", "chat"].map((tab) => (
+        {["catalog"].map((tab) => (
           <button
             key={tab}
             onClick={() => setMobileTab(tab)}
@@ -898,7 +900,7 @@ export default function CatalogPage() {
         {/* ── Right: Catalog + Cart ── */}
         <div className="right-panel">
           {/* Banner */}
-          <div style={{ padding: "28px 28px 0 28px" }}>
+          <div className="banner-container" style={{ padding: "28px 28px 0 28px" }}>
             <div
               className="banner-inner"
               style={{
@@ -994,10 +996,11 @@ export default function CatalogPage() {
                   Berita Terkait:
                 </p>
                 <div
+                  className="news-grid"
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                    gap: "16px",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))",
+                    gap: "12px",
                   }}
                 ><a
                     href="https://www.hariansinggalang.co.id/berita/246220/tim-dosen-unp-laksanakan-pkm-di-painan-beri-pendampingan-transformasi-digital-promosi-umkm-berbasis-potensi-lokal"
@@ -1181,33 +1184,42 @@ export default function CatalogPage() {
                     .map((i) => i.name)
                     .join(", ");
                   return (
-                    <Link key={umkm.id} href={`/umkm/${umkm.slug}`} style={{ textDecoration: "none" }}>
+                    <Link key={umkm.id} href={`/umkm/${umkm.slug}`} style={{ textDecoration: "none", minWidth: 0 }}>
                       <div
                         style={{
                           background: "var(--bg-secondary)",
                           border: "1px solid var(--border)",
                           borderRadius: "var(--radius-lg)",
-                          padding: "14px",
+                          padding: "12px 14px",
                           display: "flex",
-                          gap: "12px",
+                          gap: "10px",
+                          alignItems: "center",
                           height: "100%",
+                          overflow: "hidden",
+                          boxSizing: "border-box",
                         }}
                       >
-                        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
+                        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "4px" }}>
                           {umkm.komunitas && (
                             <span style={{
                               fontSize: "10px", fontWeight: 600, padding: "2px 8px",
                               borderRadius: "20px", background: "var(--komunitas-subtle)",
                               color: "var(--komunitas)", border: "1px solid var(--komunitas-border)",
-                              alignSelf: "flex-start",
+                              alignSelf: "flex-start", whiteSpace: "nowrap",
                             }}>
                               {umkm.komunitas.nama}
                             </span>
                           )}
-                          <p style={{ fontWeight: 600, fontSize: "14px", color: "var(--text-primary)" }}>
+                          <p style={{
+                            fontWeight: 600, fontSize: "14px", color: "var(--text-primary)",
+                            lineHeight: 1.3, wordBreak: "break-word", overflowWrap: "anywhere"
+                          }}>
                             {umkm.namaUsaha}
                           </p>
-                          <p style={{ fontSize: "12px", color: "var(--text-secondary)" }}>
+                          <p style={{
+                            fontSize: "12px", color: "var(--text-secondary)",
+                            lineHeight: 1.35, wordBreak: "break-word", overflowWrap: "anywhere"
+                          }}>
                             {umkm.namaOwner} · {umkm.alamatUsaha}
                           </p>
                           {menuAndalan && (
@@ -1219,6 +1231,7 @@ export default function CatalogPage() {
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
                                 whiteSpace: "nowrap",
+                                marginTop: "2px",
                               }}
                             >
                               🍽 {menuAndalan}
@@ -1229,11 +1242,11 @@ export default function CatalogPage() {
                           </p>
                         </div>
 
-                        {/* Logo UMKM — placeholder ikon kalau logoUrl belum diisi */}
+                        {/* Logo UMKM — flexShrink: 0 agar ukuran logo konsisten dan tidak pernah terpotong */}
                         <div
                           style={{
-                            width: "64px",
-                            height: "64px",
+                            width: "56px",
+                            height: "56px",
                             flexShrink: 0,
                             borderRadius: "var(--radius-md)",
                             border: "1px solid var(--border)",
@@ -1251,7 +1264,7 @@ export default function CatalogPage() {
                               style={{ width: "100%", height: "100%", objectFit: "cover" }}
                             />
                           ) : (
-                            <span style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-muted)" }}>
+                            <span style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-muted)" }}>
                               {umkm.namaUsaha.charAt(0).toUpperCase()}
                             </span>
                           )}
