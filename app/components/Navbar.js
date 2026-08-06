@@ -77,7 +77,7 @@ export default function Navbar() {
     }}>
 
       {/* ── Logo ── */}
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+      {/* <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
         <div style={{
           width: '24px',
           height: '24px',
@@ -101,7 +101,7 @@ export default function Navbar() {
         }}>
           SyRa Store
         </span>
-      </Link>
+      </Link> */}
 
       {/* ── Search Bar Navbar ── */}
       <div style={{
