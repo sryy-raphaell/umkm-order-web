@@ -7,7 +7,7 @@ export default function Chatbot({ onAddToCart }) {
       role: "assistant",
       type: "text",
       content:
-        "Hi! Saya SyRa, asisten Store. Ada yang bisa saya bantu? Misalnya, tanyakan produk yang sesuai untuk proyek IoT kamu! ",
+        "Hi! Saya SyRa, asisten Store. Menu ini sedang dalam tahap maintenance.",
     },
   ]);
   const [input, setInput] = useState("");
