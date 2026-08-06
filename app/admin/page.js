@@ -181,6 +181,119 @@ function productMatchesSearch(item, query) {
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState("orders");
+  const [authenticated, setAuthenticated] = useState(null); // null = checking, false = locked, true = unlocked
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  async function checkAuth() {
+    try {
+      const res = await fetch("/api/admin/auth");
+      const data = await res.json();
+      setAuthenticated(!!data.authenticated);
+    } catch {
+      setAuthenticated(false);
+    }
+  }
+
+  async function handleLogin(e) {
+    e?.preventDefault();
+    if (!password) return;
+    setSubmitting(true);
+    setLoginError("");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAuthenticated(true);
+        setPassword("");
+      } else {
+        setLoginError(data.error || "Password admin tidak sesuai");
+      }
+    } catch {
+      setLoginError("Terjadi kesalahan koneksi");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleLogout() {
+    if (!confirm("Keluar dari Admin?")) return;
+    await fetch("/api/admin/auth", { method: "DELETE" });
+    setAuthenticated(false);
+  }
+
+  if (authenticated === null) {
+    return (
+      <div style={{ minHeight: "100vh", background: "var(--bg-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)", fontSize: "14px" }}>
+        Memeriksa hak akses admin...
+      </div>
+    );
+  }
+
+  if (!authenticated) {
+    return (
+      <div style={{ minHeight: "100vh", background: "var(--bg-primary)", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+        <div style={{
+          width: "100%", maxWidth: "380px", background: "var(--bg-secondary)", border: "1px solid var(--border)", borderRadius: "var(--radius-lg)", padding: "32px 28px", boxShadow: "0 10px 30px rgba(0,0,0,0.15)"
+        }}>
+          <div style={{ textAlign: "center", marginBottom: "24px" }}>
+            <div style={{
+              width: "48px", height: "48px", borderRadius: "50%", background: "var(--accent-subtle)", color: "var(--accent)", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: "12px", border: "1px solid rgba(244,121,32,0.3)", fontSize: "20px"
+            }}>
+              🔒
+            </div>
+            <h1 style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-primary)", marginBottom: "6px" }}>
+              Admin Portal
+            </h1>
+            <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+              Masukkan password untuk mengelola sistem
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", marginBottom: "6px" }}>
+                Password Admin
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Masukkan password admin..."
+                style={inputStyle}
+                autoFocus
+              />
+            </div>
+
+            {loginError && (
+              <p style={{ fontSize: "12px", color: "var(--red)", background: "rgba(248,113,113,0.1)", border: "1px solid rgba(248,113,113,0.3)", padding: "8px 12px", borderRadius: "var(--radius-sm)", textAlign: "center" }}>
+                {loginError}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting || !password}
+              style={{
+                background: "var(--accent)", color: "#fff", border: "none", borderRadius: "var(--radius-md)", padding: "10px", fontSize: "14px", fontWeight: 600, cursor: submitting || !password ? "default" : "pointer", opacity: submitting || !password ? 0.7 : 1, transition: "all 0.2s"
+              }}
+            >
+              {submitting ? "Memverifikasi..." : "Masuk Admin"}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg-primary)", padding: "28px 40px" }}>
@@ -197,13 +310,33 @@ export default function AdminPage() {
       `}</style>
 
       {/* Header */}
-      <div style={{ marginBottom: "20px" }}>
-        <h1 style={{ fontSize: "18px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "4px" }}>
-          Admin
-        </h1>
-        <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
-          Kelola produk, layanan, dan pesanan
-        </p>
+      <div style={{ marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div>
+          <h1 style={{ fontSize: "18px", fontWeight: 600, color: "var(--text-primary)", marginBottom: "4px" }}>
+            Admin
+          </h1>
+          <p style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
+            Kelola produk, layanan, dan pesanan
+          </p>
+        </div>
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "var(--bg-tertiary)",
+            border: "1px solid var(--border)",
+            borderRadius: "var(--radius-sm)",
+            padding: "6px 14px",
+            fontSize: "12px",
+            fontWeight: 500,
+            color: "var(--text-secondary)",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}
+        >
+          Keluar (Logout) 🚪
+        </button>
       </div>
 
       {/* Tabs */}

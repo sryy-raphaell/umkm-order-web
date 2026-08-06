@@ -1,0 +1,39 @@
+import { cookies } from "next/headers";
+import { getExpectedToken, verifyAdminAuth } from "../../../../lib/adminAuth";
+
+export async function GET() {
+  const isAuth = await verifyAdminAuth();
+  return Response.json({ authenticated: isAuth });
+}
+
+export async function POST(req) {
+  try {
+    const { password } = await req.json();
+    const expectedPass = process.env.ADMIN_PASSWORD || "admin123";
+
+    if (password !== expectedPass) {
+      return Response.json({ error: "Password admin tidak sesuai" }, { status: 401 });
+    }
+
+    const token = getExpectedToken();
+    const cookieStore = await cookies();
+
+    cookieStore.set("admin_session", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 24, // 24 jam
+      path: "/",
+    });
+
+    return Response.json({ success: true });
+  } catch (err) {
+    return Response.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function DELETE() {
+  const cookieStore = await cookies();
+  cookieStore.delete("admin_session");
+  return Response.json({ success: true });
+}
