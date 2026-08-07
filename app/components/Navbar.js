@@ -115,7 +115,7 @@ export default function Navbar() {
         <LuSearch
           size={14}
           color="var(--text-muted)"
-          style={{ position: 'absolute', left: '10px', pointerEvents: 'none', zIndex: 1 }}
+          style={{ position: 'absolute', left: '10px', pointerEvents: 'none', zIndex: 1 , alignItems: 'center', justifyContent: 'center', display: 'flex'}}
         />
         <input
           type="text"

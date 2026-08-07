@@ -1106,7 +1106,49 @@ export default function CatalogPage() {
                   </a>
 
                 </div>
-
+                <div className="banner-news-grid"><a
+                    className="banner-news-link"
+                    href="youtube.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "12px 16px",
+                      border: "1px solid rgba(255,255,255,0.22)",
+                      borderRadius: "12px",
+                      background: "rgba(255,255,255,0.10)",
+                      backdropFilter: "blur(6px)",
+                      color: "#FFFFFF",
+                      textDecoration: "none",
+                      marginBottom: "12px",
+                      transition: "0.2s",
+                      cursor: "pointer",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.20)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "rgba(255,255,255,0.10)";
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontWeight: 600 }}>
+                        Dokumentasi Youtube Nanti
+                      </div>
+                      <div
+                        className="banner-news-source"
+                        style={{
+                          fontSize: "12px",
+                          color: "rgba(255,255,255,0.75)",
+                        }}
+                      >
+                        youtube.com
+                      </div>
+                    </div>
+                  </a>
+                </div>
                 <button
                   onClick={() =>
                     document
@@ -1127,6 +1169,7 @@ export default function CatalogPage() {
                   Lihat Produk →
                 </button>
               </div>
+              
             </div>
           </div>
 
