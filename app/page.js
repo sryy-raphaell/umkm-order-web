@@ -975,7 +975,7 @@ export default function CatalogPage() {
                   <span
                     style={{
                       fontSize: "11px",
-                      color: "#FFE8CC",
+                      color: "var(--accent)",
                       fontWeight: 500,
                     }}
                   >
@@ -1052,7 +1052,6 @@ export default function CatalogPage() {
                         Beri Pendampingan Transformasi Digital Promosi UMKM Berbasis Potensi Lokal
                       </div>
                       <div
-                        className="banner-news-source"
                         style={{
                           fontSize: "12px",
                           color: "rgba(255,255,255,0.75)",
@@ -1063,7 +1062,6 @@ export default function CatalogPage() {
                     </div>
                   </a>
                   <a
-                    className="banner-news-link"
                     href="https://rri.co.id/padang/iptek/2605541/tim-dosen-unp-dampingi-umkm-painan-bertransformasi-digital-untuk-perluas-pasar?nocache=true"
                     target="_blank"
                     rel="noopener noreferrer"
