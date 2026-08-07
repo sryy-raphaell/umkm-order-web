@@ -55,6 +55,7 @@ export async function POST(request) {
       noHpWa: normalizeWa(body.noHpWa),
       slug,
       logoUrl: body.logoUrl || null,
+      posterUrl: body.posterUrl || null,
       komunitasId: body.komunitasId || null,
     },
   });

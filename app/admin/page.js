@@ -904,14 +904,42 @@ function OrdersTab() {
 
 function UmkmManager() {
   const [umkmList, setUmkmList] = useState([]);
-  const [form, setForm] = useState({ namaOwner: "", namaUsaha: "", alamatUsaha: "", noHpWa: "" });
+  const [form, setForm] = useState({ namaOwner: "", namaUsaha: "", alamatUsaha: "", noHpWa: "", logoUrl: "", posterUrl: "" });
   const [editId, setEditId] = useState(null);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingPoster, setUploadingPoster] = useState(false);
 
   async function loadUmkm() {
     const res = await fetch("/api/umkm");
     setUmkmList(await res.json());
   }
   useEffect(() => { loadUmkm(); }, []);
+
+  async function uploadFile(file) {
+    const data = new FormData();
+    data.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: data });
+    const result = await res.json();
+    return result.url || null;
+  }
+
+  async function handleLogoChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingLogo(true);
+    const url = await uploadFile(file);
+    if (url) setForm((f) => ({ ...f, logoUrl: url }));
+    setUploadingLogo(false);
+  }
+
+  async function handlePosterChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingPoster(true);
+    const url = await uploadFile(file);
+    if (url) setForm((f) => ({ ...f, posterUrl: url }));
+    setUploadingPoster(false);
+  }
 
   async function handleSubmit() {
     if (!form.namaOwner || !form.namaUsaha || !form.noHpWa) {
@@ -923,7 +951,7 @@ function UmkmManager() {
     } else {
       await fetch("/api/umkm", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
     }
-    setForm({ namaOwner: "", namaUsaha: "", alamatUsaha: "", noHpWa: "" });
+    setForm({ namaOwner: "", namaUsaha: "", alamatUsaha: "", noHpWa: "", logoUrl: "", posterUrl: "" });
     setEditId(null);
     loadUmkm();
   }
@@ -942,6 +970,29 @@ function UmkmManager() {
         <input style={inputStyle} placeholder="Nama usaha" value={form.namaUsaha} onChange={(e) => setForm({ ...form, namaUsaha: e.target.value })} />
         <input style={inputStyle} placeholder="Alamat usaha (nagari/kecamatan)" value={form.alamatUsaha} onChange={(e) => setForm({ ...form, alamatUsaha: e.target.value })} />
         <input style={inputStyle} placeholder="No HP/WA" value={form.noHpWa} onChange={(e) => setForm({ ...form, noHpWa: e.target.value })} />
+
+        <div>
+          <label style={{ fontSize: "11px", color: "var(--text-muted)", display: "block", marginBottom: "4px" }}>
+            Logo UMKM (opsional — kalau kosong, tampil inisial nama usaha)
+          </label>
+          <input type="file" accept="image/*" onChange={handleLogoChange} style={{ fontSize: "12px" }} />
+          {uploadingLogo && <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>Mengunggah...</p>}
+          {form.logoUrl && (
+            <img src={form.logoUrl} alt="Preview logo" style={{ width: "48px", height: "48px", objectFit: "cover", borderRadius: "var(--radius-sm)", marginTop: "6px", border: "1px solid var(--border)" }} />
+          )}
+        </div>
+
+        <div>
+          <label style={{ fontSize: "11px", color: "var(--text-muted)", display: "block", marginBottom: "4px" }}>
+            Poster katalog produk (opsional — desain flyer menu, tampil di halaman toko sebelum daftar produk)
+          </label>
+          <input type="file" accept="image/*" onChange={handlePosterChange} style={{ fontSize: "12px" }} />
+          {uploadingPoster && <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>Mengunggah...</p>}
+          {form.posterUrl && (
+            <img src={form.posterUrl} alt="Preview poster" style={{ width: "100%", maxWidth: "200px", objectFit: "cover", borderRadius: "var(--radius-sm)", marginTop: "6px", border: "1px solid var(--border)" }} />
+          )}
+        </div>
+
         <button onClick={handleSubmit} style={{ background: "var(--accent-subtle)", color: "var(--accent)", border: "1px solid rgba(244,121,32,0.25)", borderRadius: "var(--radius-sm)", padding: "8px 18px", fontSize: "13px", fontWeight: 600, cursor: "pointer" }}>
           {editId ? "Update UMKM" : "Tambah UMKM"}
         </button>
@@ -952,10 +1003,10 @@ function UmkmManager() {
           <div key={u.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", border: "1px solid var(--border)", borderRadius: "var(--radius-sm)" }}>
             <div>
               <p style={{ fontSize: "13px", fontWeight: 600 }}>{u.namaUsaha}</p>
-              <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>{u.namaOwner} · {u.alamatUsaha} · {u.items?.length || 0} produk</p>
+              <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>{u.namaOwner} · {u.alamatUsaha} · {u.items?.length || 0} produk{u.posterUrl ? " · ada poster" : ""}</p>
             </div>
             <div style={{ display: "flex", gap: "6px" }}>
-              <button onClick={() => { setEditId(u.id); setForm(u); }} style={{ fontSize: "11px", cursor: "pointer" }}>Edit</button>
+              <button onClick={() => { setEditId(u.id); setForm({ namaOwner: u.namaOwner, namaUsaha: u.namaUsaha, alamatUsaha: u.alamatUsaha, noHpWa: u.noHpWa, logoUrl: u.logoUrl || "", posterUrl: u.posterUrl || "" }); }} style={{ fontSize: "11px", cursor: "pointer" }}>Edit</button>
               <button onClick={() => handleDelete(u.id)} style={{ fontSize: "11px", color: "var(--red)", cursor: "pointer" }}>Hapus</button>
             </div>
           </div>

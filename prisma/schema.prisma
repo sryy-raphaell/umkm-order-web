@@ -28,6 +28,7 @@ model Umkm {
   alamatUsaha String // nagari/kecamatan, misal "Painan-Pessel", "Tarusan"
   noHpWa      String // format 62xxxxxxxxxx, nomor kontak langsung toko
   logoUrl     String?
+  posterUrl   String? // poster katalog produk (mis. desain flyer menu), opsional per UMKM
   isActive    Boolean    @default(true)
 
   komunitasId Int?

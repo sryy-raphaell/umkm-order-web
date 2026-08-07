@@ -33,6 +33,7 @@ export async function PUT(request, { params }) {
       alamatUsaha: body.alamatUsaha,
       noHpWa: body.noHpWa ? normalizeWa(body.noHpWa) : undefined,
       logoUrl: body.logoUrl,
+      posterUrl: body.posterUrl,
       isActive: body.isActive,
     },
   });

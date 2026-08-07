@@ -596,22 +596,48 @@ export default function CatalogPage() {
           }
           .mobile-tabs { display: flex !important; }
           .collapse-btn { display: none !important; }
-          /* tighten banner on mobile */
-          .banner-inner { padding: 18px 16px !important; }
+          /* banner — tampilkan gambar penuh, teks di bawah (hindari crop cover) */
+          .banner-wrap { padding: 12px 12px 0 !important; }
+          .banner-inner {
+            padding: 0 !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            background: var(--bg-secondary) !important;
+            overflow: visible !important;
+          }
+          .banner-img-mobile { display: block !important; }
+          .banner-content { padding: 16px 14px !important; }
+          .banner-content h2 { font-size: 17px !important; line-height: 1.3 !important; color: var(--text-primary) !important; text-shadow: none !important; }
+          .banner-content .banner-subtitle { color: var(--text-secondary) !important; }
+          .banner-content .banner-badge { background: var(--komunitas-subtle) !important; border-color: var(--komunitas-border) !important; }
+          .banner-content .banner-badge span { color: var(--komunitas) !important; }
+          .banner-content .banner-news-link {
+            background: var(--bg-tertiary) !important;
+            border-color: var(--border) !important;
+            color: var(--text-primary) !important;
+          }
+          .banner-content .banner-news-link .banner-news-source { color: var(--text-muted) !important; }
+          .banner-news-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
           .catalog-area { padding: 0 12px 16px 12px !important; }
+          /* kartu UMKM — logo tidak terpotong di tepi layar */
+          .umkm-card { max-width: 100%; min-width: 0; }
+          .umkm-logo-box { width: 56px !important; height: 56px !important; min-width: 56px !important; }
+          .umkm-logo-box img { object-fit: contain !important; padding: 4px; }
           /* native feel: bigger tap targets */
           button { -webkit-tap-highlight-color: transparent; }
           input { font-size: 16px !important; } /* prevent iOS zoom */
         }
 
+        .banner-img-mobile { display: none; width: 100%; height: auto; object-fit: contain; vertical-align: top; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+        .banner-content { position: relative; z-index: 1; flex: 1; min-width: 0; }
+        .banner-news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+
         /* product grid */
-        .product-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .product-grid { display: grid; grid-template-columns: 1fr; gap: 10px; min-width: 0; }
+        .product-grid > a { min-width: 0; display: block; }
         @media (min-width: 480px) { .product-grid { grid-template-columns: repeat(2,1fr); } }
         @media (min-width: 1280px) { .product-grid { grid-template-columns: repeat(3,1fr); } }
 
-
-        .banner-stats { display: flex; }
-        @media (max-width: 640px) { .banner-stats { display: none !important; } }
 
         /* scrollbar */
         .right-panel::-webkit-scrollbar { width: 4px; }
@@ -898,11 +924,15 @@ export default function CatalogPage() {
         {/* ── Right: Catalog + Cart ── */}
         <div className="right-panel">
           {/* Banner */}
-          <div style={{ padding: "28px 28px 0 28px" }}>
+          <div className="banner-wrap" style={{ padding: "28px 28px 0 28px" }}>
             <div
               className="banner-inner"
               style={{
-                background: "var(--bg-secondary)",
+                background:
+                  "linear-gradient(120deg, rgba(20,12,4,0.82) 0%, rgba(20,12,4,0.55) 45%, rgba(20,12,4,0.25) 100%), url('/pnc-event-banner.jpg')",
+                backgroundSize: "cover",
+                height: "auto",
+                backgroundPosition: "center 10%",
                 border: "1px solid var(--border)",
                 borderRadius: "var(--radius-lg)",
                 padding: "28px 32px",
@@ -915,27 +945,21 @@ export default function CatalogPage() {
                 overflow: "hidden",
               }}
             >
-              <div
-                style={{
-                  position: "absolute",
-                  top: "-60px",
-                  right: "-60px",
-                  width: "200px",
-                  height: "200px",
-                  background: "var(--accent-glow)",
-                  borderRadius: "50%",
-                  filter: "blur(60px)",
-                  pointerEvents: "none",
-                }}
+              <img
+                className="banner-img-mobile"
+                src="/pnc-event-banner.jpg"
+                alt="Pasisia Night Culinary — komunitas wisata kuliner Painan"
               />
-              <div style={{ position: "relative", zIndex: 1 }}>
+              <div className="banner-content">
                 <div
+                  className="banner-badge"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "6px",
-                    background: "var(--accent-subtle)",
-                    border: "1px solid rgba(244,121,32,0.2)",
+                    background: "rgba(255,255,255,0.14)",
+                    backdropFilter: "blur(4px)",
+                    border: "1px solid rgba(255,255,255,0.25)",
                     borderRadius: "20px",
                     padding: "3px 10px",
                     marginBottom: "10px",
@@ -952,7 +976,7 @@ export default function CatalogPage() {
                   <span
                     style={{
                       fontSize: "11px",
-                      color: "var(--accent)",
+                      color: "#FFE8CC",
                       fontWeight: 500,
                     }}
                   >
@@ -963,7 +987,8 @@ export default function CatalogPage() {
                   style={{
                     fontSize: "22px",
                     fontWeight: 700,
-                    color: "var(--text-primary)",
+                    color: "#FFFFFF",
+                    textShadow: "0 2px 8px rgba(0,0,0,0.4)",
                     letterSpacing: "-0.5px",
                     marginBottom: "6px",
                   }}
@@ -971,9 +996,10 @@ export default function CatalogPage() {
                   KOMUNITAS WISATA KULINER PASISIA
                 </h2>
                 <p
+                  className="banner-subtitle"
                   style={{
                     fontSize: "13px",
-                    color: "var(--text-secondary)",
+                    color: "rgba(255,255,255,0.85)",
                     maxWidth: "360px",
                     lineHeight: 1.6,
                     marginBottom: "16px",
@@ -983,9 +1009,10 @@ export default function CatalogPage() {
                 </p>
                 <p> </p>
                 <p
+                  className="banner-subtitle"
                   style={{
                     fontSize: "13px",
-                    color: "var(--text-secondary)",
+                    color: "rgba(255,255,255,0.85)",
                     maxWidth: "360px",
                     lineHeight: 1.6,
                     marginBottom: "16px",
@@ -993,13 +1020,8 @@ export default function CatalogPage() {
                 >
                   Berita Terkait:
                 </p>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                    gap: "16px",
-                  }}
-                ><a
+                <div className="banner-news-grid"><a
+                    className="banner-news-link"
                     href="https://www.hariansinggalang.co.id/berita/246220/tim-dosen-unp-laksanakan-pkm-di-painan-beri-pendampingan-transformasi-digital-promosi-umkm-berbasis-potensi-lokal"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1008,20 +1030,21 @@ export default function CatalogPage() {
                       alignItems: "center",
                       gap: "10px",
                       padding: "12px 16px",
-                      border: "1px solid var(--border-color)",
+                      border: "1px solid rgba(255,255,255,0.22)",
                       borderRadius: "12px",
-                      background: "var(--card-bg)",
-                      color: "var(--text-primary)",
+                      background: "rgba(255,255,255,0.10)",
+                      backdropFilter: "blur(6px)",
+                      color: "#FFFFFF",
                       textDecoration: "none",
                       marginBottom: "12px",
                       transition: "0.2s",
                       cursor: "pointer",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "var(--hover-bg)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.20)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "var(--card-bg)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.10)";
                     }}
                   >
                     <div>
@@ -1030,9 +1053,10 @@ export default function CatalogPage() {
                         Beri Pendampingan Transformasi Digital Promosi UMKM Berbasis Potensi Lokal
                       </div>
                       <div
+                        className="banner-news-source"
                         style={{
                           fontSize: "12px",
-                          color: "var(--text-secondary)",
+                          color: "rgba(255,255,255,0.75)",
                         }}
                       >
                         hariansinggalang.co.id
@@ -1040,6 +1064,7 @@ export default function CatalogPage() {
                     </div>
                   </a>
                   <a
+                    className="banner-news-link"
                     href="https://rri.co.id/padang/iptek/2605541/tim-dosen-unp-dampingi-umkm-painan-bertransformasi-digital-untuk-perluas-pasar?nocache=true"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1048,20 +1073,21 @@ export default function CatalogPage() {
                       alignItems: "center",
                       gap: "10px",
                       padding: "12px 16px",
-                      border: "1px solid var(--border-color)",
+                      border: "1px solid rgba(255,255,255,0.22)",
                       borderRadius: "12px",
-                      background: "var(--card-bg)",
-                      color: "var(--text-primary)",
+                      background: "rgba(255,255,255,0.10)",
+                      backdropFilter: "blur(6px)",
+                      color: "#FFFFFF",
                       textDecoration: "none",
                       marginBottom: "12px",
                       transition: "0.2s",
                       cursor: "pointer",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "var(--hover-bg)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.20)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "var(--card-bg)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.10)";
                     }}
                   >
                     <div>
@@ -1069,9 +1095,10 @@ export default function CatalogPage() {
                         Tim Dosen UNP Dampingi UMKM Painan Bertransformasi Digital untuk Perluas Pasar
                       </div>
                       <div
+                        className="banner-news-source"
                         style={{
                           fontSize: "12px",
-                          color: "var(--text-secondary)",
+                          color: "rgba(255,255,255,0.75)",
                         }}
                       >
                         rri.co.id
@@ -1100,44 +1127,6 @@ export default function CatalogPage() {
                 >
                   Lihat Produk →
                 </button>
-              </div>
-              <div
-                className="banner-stats"
-                style={{
-                  display: "flex",
-                  gap: "28px",
-                  flexShrink: 0,
-                  position: "relative",
-                  zIndex: 1,
-                }}
-              >
-                {[
-                  // { value: items.length, label: "Total Item" },
-                  // {
-                  //   value: items.filter((i) => i.type === "product").length,
-                  //   label: "Hardware",
-                  // },
-                  // {
-                  //   value: items.filter((i) => i.type === "service").length,
-                  //   label: "Layanan",
-                  // },
-                ].map((s, i) => (
-                  <div key={i} style={{ textAlign: "center" }}>
-                    <p
-                      style={{
-                        fontSize: "24px",
-                        fontWeight: 700,
-                        color: "var(--text-primary)",
-                        letterSpacing: "-1px",
-                      }}
-                    >
-                      {s.value}
-                    </p>
-                    <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>
-                      {s.label}
-                    </p>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
@@ -1181,8 +1170,9 @@ export default function CatalogPage() {
                     .map((i) => i.name)
                     .join(", ");
                   return (
-                    <Link key={umkm.id} href={`/umkm/${umkm.slug}`} style={{ textDecoration: "none" }}>
+                    <Link key={umkm.id} href={`/umkm/${umkm.slug}`} style={{ textDecoration: "none", display: "block", minWidth: 0 }}>
                       <div
+                        className="umkm-card"
                         style={{
                           background: "var(--bg-secondary)",
                           border: "1px solid var(--border)",
@@ -1191,6 +1181,7 @@ export default function CatalogPage() {
                           display: "flex",
                           gap: "12px",
                           height: "100%",
+                          minWidth: 0,
                         }}
                       >
                         <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -1231,6 +1222,7 @@ export default function CatalogPage() {
 
                         {/* Logo UMKM — placeholder ikon kalau logoUrl belum diisi */}
                         <div
+                          className="umkm-logo-box"
                           style={{
                             width: "64px",
                             height: "64px",
@@ -1248,7 +1240,7 @@ export default function CatalogPage() {
                             <img
                               src={umkm.logoUrl}
                               alt={umkm.namaUsaha}
-                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                              style={{ width: "100%", height: "100%", objectFit: "contain" }}
                             />
                           ) : (
                             <span style={{ fontSize: "20px", fontWeight: 700, color: "var(--text-muted)" }}>

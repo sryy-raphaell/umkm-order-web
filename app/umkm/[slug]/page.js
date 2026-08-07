@@ -446,6 +446,23 @@ export default function UmkmDetailPage() {
         </a>
       </div>
 
+      {umkm.posterUrl && (
+        <div
+          style={{
+            marginBottom: "20px",
+            borderRadius: "var(--radius-lg)",
+            overflow: "hidden",
+            border: "1px solid var(--border)",
+          }}
+        >
+          <img
+            src={umkm.posterUrl}
+            alt={`Poster katalog produk ${umkm.namaUsaha}`}
+            style={{ width: "100%", display: "block" }}
+          />
+        </div>
+      )}
+
       <div
         style={{
           display: "grid",
