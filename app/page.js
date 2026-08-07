@@ -609,8 +609,8 @@ export default function CatalogPage() {
           .banner-content { padding: 16px 14px !important; }
           .banner-content h2 { font-size: 17px !important; line-height: 1.3 !important; color: var(--text-primary) !important; text-shadow: none !important; }
           .banner-content .banner-subtitle { color: var(--text-secondary) !important; }
-          .banner-content .banner-badge { background: var(--komunitas-subtle) !important; border-color: var(--komunitas-border) !important; }
-          .banner-content .banner-badge span { color: var(--komunitas) !important; }
+          .banner-content .banner-badge { background: var(--accent-subtle) !important; border-color: var(--accent-dim) !important; }
+          .banner-content .banner-badge span { color: var(--accent) !important; }
           .banner-content .banner-news-link {
             background: var(--bg-tertiary) !important;
             border-color: var(--border) !important;
@@ -1052,6 +1052,7 @@ export default function CatalogPage() {
                         Beri Pendampingan Transformasi Digital Promosi UMKM Berbasis Potensi Lokal
                       </div>
                       <div
+                        className="banner-news-source"
                         style={{
                           fontSize: "12px",
                           color: "rgba(255,255,255,0.75)",
@@ -1062,6 +1063,7 @@ export default function CatalogPage() {
                     </div>
                   </a>
                   <a
+                    className="banner-news-link"
                     href="https://rri.co.id/padang/iptek/2605541/tim-dosen-unp-dampingi-umkm-painan-bertransformasi-digital-untuk-perluas-pasar?nocache=true"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -1092,6 +1094,7 @@ export default function CatalogPage() {
                         Tim Dosen UNP Dampingi UMKM Painan Bertransformasi Digital untuk Perluas Pasar
                       </div>
                       <div
+                        className="banner-news-source"
                         style={{
                           fontSize: "12px",
                           color: "rgba(255,255,255,0.75)",
