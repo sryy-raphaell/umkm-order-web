@@ -633,8 +633,7 @@ export default function CatalogPage() {
         .banner-news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
 
         /* product grid */
-        .product-grid { display: grid; grid-template-columns: 1fr; gap: 10px; min-width: 0; }
-        .product-grid > a { min-width: 0; display: block; }
+        .product-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         @media (min-width: 480px) { .product-grid { grid-template-columns: repeat(2,1fr); } }
         @media (min-width: 1280px) { .product-grid { grid-template-columns: repeat(3,1fr); } }
 
@@ -1095,7 +1094,6 @@ export default function CatalogPage() {
                         Tim Dosen UNP Dampingi UMKM Painan Bertransformasi Digital untuk Perluas Pasar
                       </div>
                       <div
-                        className="banner-news-source"
                         style={{
                           fontSize: "12px",
                           color: "rgba(255,255,255,0.75)",
