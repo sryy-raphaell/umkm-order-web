@@ -1108,7 +1108,7 @@ export default function CatalogPage() {
                 </div>
                 <div className="banner-news-grid"><a
                     className="banner-news-link"
-                    href="youtube.com"
+                    href="https://youtu.be/rB1OrhkZBs4?si=G2s9hETzZdBTC_m0"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -1135,7 +1135,7 @@ export default function CatalogPage() {
                   >
                     <div>
                       <div style={{ fontWeight: 600 }}>
-                        Dokumentasi Youtube Nanti
+                        Pengabdian kepada Masyarakat BIMA 2026 | Transformasi Digital Promosi UMKM Desa Painan 
                       </div>
                       <div
                         className="banner-news-source"
